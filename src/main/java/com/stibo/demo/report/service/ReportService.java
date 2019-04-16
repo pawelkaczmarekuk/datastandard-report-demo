@@ -45,7 +45,7 @@ public class ReportService {
 
     }
 
-    public void resolveNestedTypes(final Datastandard datastandard, final AttributeLink theAttributeLink, StringBuilder stringBuilder) {
+    private void resolveNestedTypes(final Datastandard datastandard, final AttributeLink theAttributeLink, StringBuilder stringBuilder) {
         stringBuilder.append("  ");
         findAttribute(datastandard, theAttributeLink).ifPresent(theAttribute -> {
             stringBuilder.append(String.format("%s%s: %s", theAttribute.getName(), theAttributeLink.getOptional() ? "*" : "", theAttribute.getType().getId()));
@@ -59,7 +59,7 @@ public class ReportService {
 
     }
 
-    public Optional<Attribute> findAttribute(final Datastandard datastandard, final AttributeLink attributeLink) {
+    private Optional<Attribute> findAttribute(final Datastandard datastandard, final AttributeLink attributeLink) {
         return datastandard.getAttributes().stream().filter(attribute -> attribute.getId().equals(attributeLink.getId())).findFirst();
     }
 
