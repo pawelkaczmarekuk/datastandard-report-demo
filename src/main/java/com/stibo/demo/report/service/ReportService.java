@@ -23,10 +23,10 @@ public class ReportService {
 
         return datastandard
                 .getCategories()
-                .stream()
+                .parallelStream()
                 .filter(category -> category.getId().equals(categoryId))
                 .flatMap( category ->
-                    category.getAttributeLinks().stream().map( attributeLink ->
+                    category.getAttributeLinks().parallelStream().map( attributeLink ->
                         findAttribute(datastandard, attributeLink)
                                 .map( attribute -> {
                                     StringBuilder nestedTypes = new StringBuilder();
@@ -36,7 +36,7 @@ public class ReportService {
                                             attributeLink.getOptional() ? String.format("%s*", attribute.getName()) : attribute.getName(),
                                             attribute.getDescription() == null ? "" : attribute.getDescription(),
                                             attribute.getType().getMultiValue() ? String.format("%s{\n%s\n}[]", attribute.getType().getId(), nestedTypes) : attribute.getType().getId(),
-                                            datastandard.getAttributeGroups().stream().filter(attributeGroup -> attribute.getGroupIds().indexOf(attributeGroup.getId()) >= 0)
+                                            datastandard.getAttributeGroups().parallelStream().filter(attributeGroup -> attribute.getGroupIds().indexOf(attributeGroup.getId()) >= 0)
                                                     .map(AttributeGroup::getName).sorted().collect(Collectors.joining("\n"))
                                     );
                                 }).orElseGet( null)
